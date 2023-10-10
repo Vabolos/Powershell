@@ -1,3 +1,5 @@
+# DELETE THIS SCRIPT 
+
 # Variables to fill in
 $csvFilePath = "C:\test\Greentech-Users-V2.csv"
 $domain = "lan.greentechsolutions.nl"
