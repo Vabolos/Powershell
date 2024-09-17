@@ -21,6 +21,7 @@ try{
     $date = Get-Date -Format "yyyy-MM-dd"
     $outputPath = "C:\temp\DiskspaceReports\_$date.csv"
     $diskSpace | Export-Csv -Path $outputPath -NoTypeInformation
+    Write-Host ".CVS file has successfully been created/updated"
 }
 catch [System.IO.IOException] {
     Write-Error "Error: Could not access file $outputPath because it is being used by another process. Please close the file and try again." 
