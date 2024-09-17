@@ -19,7 +19,7 @@ try{
     }
     # Data opgeslagen in csv file met de huidige datum erachter en daarna verplaatst naar de temp folder
     $date = Get-Date -Format "yyyy-MM-dd"
-    $outputPath = "C:\temp\DiskspaceReports\_$date.csv"
+    $outputPath = "C:\temp\DiskspaceReports\DiskReport_$date.csv"
     $diskSpace | Export-Csv -Path $outputPath -NoTypeInformation
     Write-Host ".CVS file has successfully been created/updated"
 }
