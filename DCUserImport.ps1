@@ -1,5 +1,5 @@
 # Variables to fill in
-$csvFilePath = "C:\test\Greentech-Users-V2.csv"
+$csvFilePath = "C:\test\Greentech-Users.csv"
 $domain = "lan.greentechsolutions.nl"
 $departmentMapping = @{
     "Finance" = "GL-Finance"
@@ -11,7 +11,7 @@ $departmentMapping = @{
 }
 
 # Import users from CSV file
-$users = Import-Csv -Path $csvFilePath -Delimiter "`t"
+$users = Import-Csv -Path $csvFilePath -Delimiter ";"
 
 foreach ($user in $users) {
     # Extract user data from the CSV row
@@ -67,13 +67,13 @@ foreach ($user in $users) {
             # Add the user to the department security group
             if (![string]::IsNullOrWhiteSpace($department)) {
                 $groupName = "GL-$department"
-                Write-Host "Group found! $groupName being added to $username rn"
+                Write-Host "Group found! $groupName being added to $username"
                 Add-ADGroupMember -Identity $groupName -Members $newUser -ErrorAction Stop
             } else {
                 Write-Host "No department and no group specified"
             }
         } catch {
-            Write-Host "Error creating user account for $(username): $($_.Exception.Message)"
+            Write-Host "Error creating user account for $username: $($_.Exception.Message)"
             Write-Host "Detailed error: $($newADUserError | Out-String)"
         }
     } else {
