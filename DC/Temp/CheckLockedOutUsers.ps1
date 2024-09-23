@@ -1,0 +1,2 @@
+Search-ADAccount -LockedOut
+pause
