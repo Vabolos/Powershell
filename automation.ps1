@@ -9,15 +9,15 @@ param(
     [Parameter(Position=3)]
     [String[]]$dnsServers = ("127.0.0.1", "8.8.8.8"),
     [Parameter(Position=4)]
-    [string]$domainName = "automation.nl",
+    [string]$domainName = "coolnetwork.com",
     [Parameter(Position=5)]
-    [string]$scopeName = "automationScope"
+    [string]$scopeName = "coolScope"
 )
 
 # Get the network adapter to configure
 $adapter = Get-NetAdapter | Where-Object { $_.Status -eq 'Up' }
 
-if ($adapter -eq $null) {
+if ($null -eq $adapter) {
     Write-Host "No active network adapter found."
 }
 else {
