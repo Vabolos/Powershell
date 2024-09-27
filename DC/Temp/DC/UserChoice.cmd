@@ -24,7 +24,7 @@ if "%choice%"=="1" (
 ) else if "%choice%"=="4" (
     PowerShell -File "UserInfo.ps1"
     goto menu
-) else if "%choice%"=="5" (
+) else if "%choice%"=="5", "exit" (
     echo Exiting...
     exit
 ) else (
