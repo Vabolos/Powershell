@@ -1,13 +1,13 @@
 REM @echo off
 REM *************************************************************
-REM *							        *
-REM *	Vogels - Run Winget Update Tool				*
-REM *	Author: Written by Thomas Jacobs			*
-REM *							        *
+REM *							                                *
+REM *	Shell - Run Winget Update Tool				            *
+REM *	Author: Written by Vabolos      			            *
+REM *							                                *
 REM *************************************************************
 REM
 echo ************************************************************
-echo * Run Winget Update Tool			 		*
+echo * Run Winget Update Tool			 		                *
 echo ************************************************************
 
 
