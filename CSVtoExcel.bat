@@ -1,2 +1,2 @@
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ./csvexcel.ps1"
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& ./CSVtoExcel.ps1"
 pause
