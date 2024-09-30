@@ -2,14 +2,14 @@
 $path = "c:\office365install"
 $office2016_path = "c:\office365install\Office"
 $min_size = 2000
-$startmenu = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office 2016"
+# $startmenu = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Microsoft Office 2016"
 
-SET __COMPAT_LAYER=WINXPSP3
+Set-Variable __COMPAT_LAYER=WINXPSP3
 
 if(!(Test-Path -Path $path))
 {
     Write-output "Creating local install folder"
-    md $path
+    mkdir $path
     write-output "Done..."
 }
 else
@@ -41,10 +41,10 @@ else
 
 write-output "Done...copying Office files"
 
-cd $path
+Set-Location $path
 
-#Write-output "Downloading office 2016, this will take a while..."
-#& .\setup.exe /download configuration.xml
+# Write-output "Downloading office 2016, this will take a while..."
+# & .\setup.exe /download configuration.xml
 
 if(!(Test-Path -Path $office2016_path))
 {
@@ -91,7 +91,7 @@ if(!(($FolderSize -gt $min_size) ))
 
 
     Write-output "Removing temporary files Office setup"
-    cd $path
+    Set-Location $path
     ##remove temporary files from temp folder after installation
     remove-item setup.exe
     remove-item configuration.xml
@@ -102,4 +102,5 @@ if(!(($FolderSize -gt $min_size) ))
 
 write-output "."
 Write-output "Installation completed succesfully!"
+
 Pause
