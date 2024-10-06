@@ -62,3 +62,5 @@ catch {
     Write-Host "Failed to modify file permissions. Error: $_" -ForegroundColor Red
     Stop-Script
 }
+
+#end script
