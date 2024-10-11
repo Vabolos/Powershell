@@ -18,7 +18,7 @@ Do {
     # Perform the AD account locked-out search
     Search-ADAccount -LockedOut
 
-    # # Pause the script to check output (uncomment for extra confirmation in script)
+    # # Pause the script to check output (uncomment for extra confirmation)
     # Pause
 
     # Ask user if they want to restart or close the script
