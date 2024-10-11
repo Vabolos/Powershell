@@ -1,10 +1,9 @@
 # Function to unlock an AD user account
 function Unlock-ADUserAccount {
-    param(
-        [string]$Username
-    )
-
     try {
+        # Get the username input from the user
+        $Username = Read-Host -Prompt "Enter the username to unlock:"
+        
         # Import the Active Directory module
         Import-Module ActiveDirectory -ErrorAction Stop
 
@@ -27,16 +26,10 @@ function Unlock-ADUserAccount {
     catch {
         Write-Host "Error: $_" -ForegroundColor Red
     }
+
+    # Pause for 3 seconds before continuing
+    Start-Sleep -Seconds 3
 }
 
-# Get the username input from the user
-$Username = Read-Host -Prompt "Enter the username to unlock"
-
-# Pause for 2 seconds before calling the function
-Start-Sleep -Seconds 2
-
-# Call the function with the input username
-Unlock-ADUserAccount -Username $Username
-
-# Pause for 3 seconds after function execution
-Pause
+# Call the function
+Unlock-ADUserAccount
