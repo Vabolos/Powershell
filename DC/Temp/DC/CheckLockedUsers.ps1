@@ -16,14 +16,21 @@ if (-not (Test-Admin)) {
 
 Do {
     # Perform the AD account locked-out search
-    Search-ADAccount -LockedOut
+    $lockedOutUsers = Search-ADAccount -LockedOut
 
-    # # Pause the script to check output (uncomment for extra confirmation)
-    # Pause
+    # Check if any locked-out users were found
+    if ($lockedOutUsers) {
+        Write-Host "Locked-out users:" -ForegroundColor Yellow
+        $lockedOutUsers | ForEach-Object {
+            Write-Host $_.SamAccountName
+        }
+    } else {
+        Write-Host "There are no users currently locked out." -ForegroundColor Green
+    }
 
     # Ask user if they want to restart or close the script
     $response = Read-Host "Would you like to [R]estart or [C]lose the script?"
-    
+
     # Clear previous output
     Clear-Host
 # Continue the loop if the user chooses 'R', exit if 'C'
