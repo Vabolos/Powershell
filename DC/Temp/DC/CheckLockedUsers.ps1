@@ -21,8 +21,10 @@ Do {
     # Check if any locked-out users were found
     if ($lockedOutUsers) {
         Write-Host "Locked-out users:" -ForegroundColor Yellow
+        # Display full information for each locked-out user
         $lockedOutUsers | ForEach-Object {
-            Write-Host $_.SamAccountName
+            $_ | Format-List *
+            Write-Host "------------------------------" -ForegroundColor Cyan
         }
     } else {
         Write-Host "There are no users currently locked out." -ForegroundColor Green
