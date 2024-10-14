@@ -1,0 +1,8 @@
+UserInfo.ps1=Get user information
+UnlockLockedUsers.ps1=Unlock all locked users
+Unlock_specific_user.ps1=Unlock a specific user
+LockedUsersLog.ps1=Log all locked users
+DisabledUsers.ps1=Get all disabled users
+CheckLockedUsers.ps1=Check all locked users
+Disable_specific_user.ps1=Disable a specific user
+Enable_specific_user.ps1=Enable a specific user
