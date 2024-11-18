@@ -6,3 +6,7 @@ DisabledUsers.ps1=Get all disabled users
 CheckLockedUsers.ps1=Check all locked users
 Disable_specific_user.ps1=Disable a specific user
 Enable_specific_user.ps1=Enable a specific user
+Open_Server_Manager.ps1=Open the Server Manager
+Open_DNS_Manager.ps1=Open the DNS Manager
+Open_DHCP_Manager.ps1=Open the DHCP Manager
+Open_drive_maps.ps1=Open the Drive Mappings GPO
