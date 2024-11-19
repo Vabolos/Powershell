@@ -1,5 +1,5 @@
 # Resolve the full path to the .cmd file on the desktop
-$cmdFilePath = Join-Path -Path $env:USERPROFILE -ChildPath "Desktop\FileManagement.cmd"
+$cmdFilePath = "$env:USERPROFILE\Desktop\PowerShellScripts\FileManagement.cmd"
 
 # Check if the file exists before trying to open it
 if (Test-Path $cmdFilePath) {
