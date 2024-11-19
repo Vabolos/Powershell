@@ -41,7 +41,7 @@ for %%f in ("%scriptFolder%\*.ps1") do (
 
     :: Check if the script is in the exclusion list
     echo !excludeList! | findstr /i "\<%%~nf\>" >nul && (
-        echo Skipping excluded script: %%~nF.ps1
+        echo ---Skipping excluded script---
     ) || (
         echo !i!. !alias!
         set "script[!i!]=%%f"
