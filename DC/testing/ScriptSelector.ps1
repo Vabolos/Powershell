@@ -13,7 +13,7 @@ $excludeFile = Join-Path -Path $scriptFolder -ChildPath "exclude.txt"
 Write-Host "Script folder path: $scriptFolder" -ForegroundColor Cyan
 
 # Read aliases from the aliases file if provided
-$aliases = @{ }
+$aliases = @{}
 if (Test-Path $AliasFile) {
     Write-Host "Alias file found: $AliasFile" -ForegroundColor Green
     Get-Content $AliasFile | ForEach-Object {
@@ -54,46 +54,37 @@ $window.WindowStartupLocation = 'CenterScreen'
 $stackPanel = New-Object System.Windows.Controls.StackPanel
 $stackPanel.Margin = 10
 
-# Dynamically create buttons for each script
-$scriptPaths = Get-ChildItem -Path $scriptFolder -Filter "*.ps1" -File
+# Dynamically create buttons for each script based on the alias file
+foreach ($aliasName in $aliases.Values) {
+    # Debugging: Log the current alias being processed
+    Write-Host "Processing alias: $aliasName" -ForegroundColor Blue
+    
+    # Get the corresponding script file name for the alias
+    $scriptFileName = $aliases.GetEnumerator() | Where-Object { $_.Value -eq $aliasName } | Select-Object -ExpandProperty Key
+    Write-Host "Script name from alias: $scriptFileName" -ForegroundColor Cyan
 
-foreach ($script in $scriptPaths) {
+    # Get the corresponding script file path
+    $scriptFilePath = Join-Path -Path $scriptFolder -ChildPath "$scriptFileName.ps1"
+    Write-Host "Script file path: $scriptFilePath" -ForegroundColor Green
+
     # Skip scripts listed in the exclude file
-    if ($excludedScripts -contains $script.BaseName) {
-        Write-Host "Skipping excluded script: $($script.BaseName)" -ForegroundColor Red
+    if ($excludedScripts -contains $scriptFileName) {
+        Write-Host "Skipping excluded script: $scriptFileName" -ForegroundColor Red
         continue
     }
 
-    # Get the alias for the script from the aliases hashtable
-    $alias = $aliases[$script.BaseName]
-
-    # Debug: Log script and alias before creating the button
-    Write-Host "Processing script: $($script.BaseName)" -ForegroundColor Blue
-    if ($alias) {
-        Write-Host "Alias found: $alias" -ForegroundColor Green
-    } else {
-        Write-Host "No alias found. Using script name." -ForegroundColor Yellow
-        $alias = $script.BaseName
-    }
-
-    # Capture the script's full path in a scoped variable
-    $scriptPath = $script.FullName
-
-    # Debug: Log the value of scriptPath
-    Write-Host "Button will execute: $scriptPath" -ForegroundColor Cyan
+    # Debugging: Log before creating button
+    Write-Host "Creating button for script: $scriptFilePath" -ForegroundColor Cyan
 
     # Create a button for each script
     $button = New-Object System.Windows.Controls.Button
-    $button.Content = $alias  # Set the button's content to the alias or script name
+    $button.Content = $aliasName  # Set the button's content to the alias name
     $button.Margin = 5
 
-    # Debug: Log button creation
-    Write-Host "Creating button for script: $scriptPath" -ForegroundColor Cyan
-
-    # Add click event with a properly scoped variable
+    # Add click event with the specific script for each button
     $button.Add_Click({
-        Write-Host "Executing script: $scriptPath" -ForegroundColor Green
-        Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
+        Write-Host "Executing script: $scriptFilePath" -ForegroundColor Green
+        Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptFilePath`""
     })
 
     # Add the button to the StackPanel
