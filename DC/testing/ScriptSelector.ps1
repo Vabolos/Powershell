@@ -54,7 +54,7 @@ $window.WindowStartupLocation = 'CenterScreen'
 $stackPanel = New-Object System.Windows.Controls.StackPanel
 $stackPanel.Margin = 10
 
-# Dynamically create buttons for each script based on the alias file
+# Dynamically create buttons for each alias based on the alias file
 foreach ($aliasName in $aliases.Values) {
     # Debugging: Log the current alias being processed
     Write-Host "Processing alias: $aliasName" -ForegroundColor Blue
@@ -81,7 +81,7 @@ foreach ($aliasName in $aliases.Values) {
     $button.Content = $aliasName  # Set the button's content to the alias name
     $button.Margin = 5
 
-    # Add click event with the specific script for each button
+    # Create a script block to execute the script
     $button.Add_Click({
         Write-Host "Executing script: $scriptFilePath" -ForegroundColor Green
         Start-Process -FilePath "powershell.exe" -ArgumentList "-NoProfile -ExecutionPolicy Bypass -File `"$scriptFilePath`""
