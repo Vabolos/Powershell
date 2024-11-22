@@ -13,7 +13,7 @@ $excludeFile = Join-Path -Path $scriptFolder -ChildPath "exclude.txt"
 Write-Host "Script folder path: $scriptFolder" -ForegroundColor Cyan
 
 # Read aliases from the aliases file if provided
-$aliases = @{}
+$aliases = @{ }
 if (Test-Path $AliasFile) {
     Write-Host "Alias file found: $AliasFile" -ForegroundColor Green
     Get-Content $AliasFile | ForEach-Object {
@@ -67,7 +67,7 @@ foreach ($script in $scriptPaths) {
     # Get the alias for the script from the aliases hashtable
     $alias = $aliases[$script.BaseName]
 
-    # Debug: Log script and alias
+    # Debug: Log script and alias before creating the button
     Write-Host "Processing script: $($script.BaseName)" -ForegroundColor Blue
     if ($alias) {
         Write-Host "Alias found: $alias" -ForegroundColor Green
@@ -78,6 +78,9 @@ foreach ($script in $scriptPaths) {
 
     # Capture the script's full path in a scoped variable
     $scriptPath = $script.FullName
+
+    # Debug: Log the value of scriptPath
+    Write-Host "Button will execute: $scriptPath" -ForegroundColor Cyan
 
     # Create a button for each script
     $button = New-Object System.Windows.Controls.Button
