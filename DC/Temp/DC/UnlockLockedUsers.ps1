@@ -9,7 +9,6 @@ function Test-Admin {
 if (-not (Test-Admin)) {
     Write-Host "Restarting PowerShell with elevated privileges..." -ForegroundColor Green
     Start-Sleep -Seconds 1
-    # Relaunch PowerShell with 'Run as Administrator' and pass the script as an argument
     Start-Process powershell -ArgumentList "-File `"$($MyInvocation.MyCommand.Definition)`"" -Verb RunAs
     exit
 }
@@ -20,27 +19,60 @@ $LockedOutUsers = Search-ADAccount -LockedOut -UsersOnly
 # Filter out disabled users
 $ActiveLockedOutUsers = $LockedOutUsers | Where-Object { $_.Enabled -eq $true }
 
-# Initialize a counter for successfully unlocked users
-$UnlockedUsers = @()
-
-# Unlock active, locked-out users
-foreach ($user in $ActiveLockedOutUsers) {
-    try {
-        # Attempt to unlock the user
-        Unlock-ADAccount -Identity $user
-        Write-Host "Unlocked user: $($user.SamAccountName) - $($user.Name)"
-        # Add successfully unlocked user to the list (both SAM and Full Name)
-        $UnlockedUsers += "$($user.SamAccountName) - $($user.Name)"
-    }
-    catch {
-        Write-Host "Failed to unlock user: $($user.SamAccountName) - $($user.Name) - $_" -ForegroundColor Yellow
-    }
+# Check if there are any locked users
+if ($ActiveLockedOutUsers.Count -eq 0) {
+    Write-Host "No active locked-out users found." -ForegroundColor Yellow
+    pause
+    return
 }
 
-# Output list and count of unlocked users
-$UnlockedUserCount = $UnlockedUsers.Count
-Write-Host "`nTotal unlocked users: $UnlockedUserCount"
-Write-Host "Unlocked users:"
-$UnlockedUsers | ForEach-Object { $_ }
+# Add an Index property using Select-Object instead of modifying the original object
+$index = 1
+$ActiveLockedOutUsers = $ActiveLockedOutUsers | Select-Object @{Name="Index"; Expression={ $script:index; $script:index++ }}, *
+
+# Display the list of locked users with numbers
+Write-Host "`nLocked Users:"
+$ActiveLockedOutUsers | ForEach-Object {
+    Write-Host "$($_.Index). $($_.SamAccountName) - $($_.Name)"
+}
+
+# Prompt for unlock method
+$choice = Read-Host "`nHow would you like to unlock: [S]pecify/[A]ll"
+
+if ($choice -eq "A") {
+    # Unlock all users
+    foreach ($user in $ActiveLockedOutUsers) {
+        try {
+            Unlock-ADAccount -Identity $user.SamAccountName
+            Write-Host "Unlocked: $($user.SamAccountName) - $($user.Name)" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Failed to unlock: $($user.SamAccountName) - $($user.Name) - $_" -ForegroundColor Yellow
+        }
+    }
+}
+elseif ($choice -eq "S") {
+    # Unlock a specific user
+    $userIndex = Read-Host "Enter the number of the user to unlock"
+
+    # Convert input to an integer and find the corresponding user
+    $selectedUser = $ActiveLockedOutUsers | Where-Object { $_.Index -eq [int]$userIndex }
+
+    if ($selectedUser) {
+        try {
+            Unlock-ADAccount -Identity $selectedUser.SamAccountName
+            Write-Host "Unlocked: $($selectedUser.SamAccountName) - $($selectedUser.Name)" -ForegroundColor Green
+        }
+        catch {
+            Write-Host "Failed to unlock: $($selectedUser.SamAccountName) - $($selectedUser.Name) - $_" -ForegroundColor Yellow
+        }
+    }
+    else {
+        Write-Host "Invalid selection. Please enter a valid number." -ForegroundColor Red
+    }
+}
+else {
+    Write-Host "Invalid choice. Exiting..." -ForegroundColor Red
+}
 
 pause
